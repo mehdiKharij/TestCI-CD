@@ -13,7 +13,7 @@ pipeline {
                     steps {
                         script {
                             // Exécution du test Google en parallèle
-                            sh 'npm run test:google'
+                            bat 'npm run test:google'
                         }
                     }
                 }
@@ -21,7 +21,7 @@ pipeline {
                     steps {
                         script {
                             // Exécution du test Wikipedia en parallèle
-                            sh 'npm run test:wikipedia'
+                            bat 'npm run test:wikipedia'
                         }
                     }
                 }
