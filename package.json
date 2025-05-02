@@ -1,0 +1,19 @@
+{
+  "name": "testproject",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test:google": "testcafe chrome tests/test-google.js --skip-js-errors --video artifacts/videos/ --reporter html:artifacts/reports/google-report.html",
+    "test:wikipedia": "testcafe chrome tests/test-wikipedia.js --skip-js-errors --video artifacts/videos/ --reporter html:artifacts/reports/wikipedia-report.html"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "description": "",
+  "devDependencies": {
+    "@ffmpeg-installer/ffmpeg": "^1.1.0",
+    "testcafe": "^3.7.2",
+    "testcafe-reporter-html": "^1.4.6"
+  }
+}
