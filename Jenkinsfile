@@ -7,15 +7,6 @@ pipeline {
     }
 
     stages {
-        stage('Install dependencies') {
-            steps {
-                script {
-                    // Installe TestCafe et d'autres dépendances nécessaires
-                    sh 'npm install'
-                }
-            }
-        }
-
         stage('Run Tests in Parallel') {
             parallel {
                 stage('Test Google') {
