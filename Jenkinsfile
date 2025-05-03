@@ -1,4 +1,4 @@
-pipeline {
+ pipeline {
     agent any
 
     environment {
@@ -7,17 +7,6 @@ pipeline {
     }
 
     stages {
-        stage('Clean Old Artifacts') {
-            steps {
-                script {
-                    // Supprimer les anciennes vidéos et rapports
-                    echo 'Suppression des anciennes vidéos et rapports...'
-                    sh "rm -rf ${VIDEO_DIR}/*"
-                    sh "rm -rf ${REPORT_DIR}/*"
-                }
-            }
-        }
-
         stage('Run Tests in Parallel') {
             parallel {
                 stage('Test Google') {
