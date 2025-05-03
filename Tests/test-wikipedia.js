@@ -10,5 +10,5 @@ test('Connexion a wikipedia Test', async t => {
     await t
         .typeText(user, 'pz@gmail.com')
         .typeText(pwd, '123456')
-        .pressKey('enter')
+         .wait(60000)
 });
