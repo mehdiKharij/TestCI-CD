@@ -2,8 +2,9 @@ pipeline {
     agent any
 
     environment {
-        VIDEO_DIR = 'artifacts/videos/'
-        REPORT_DIR = 'artifacts/reports/'
+        VERSIONED_DIR = "artifacts/V${BUILD_NUMBER}/"
+        VIDEO_DIR = "artifacts/V${BUILD_NUMBER}/videos"
+        REPORT_DIR = "artifacts/V${BUILD_NUMBER}/reports"
     }
 
     stages {
@@ -29,20 +30,31 @@ pipeline {
             parallel {
                 stage('Test Google') {
                     steps {
-                        bat 'npm run test:google'
+                        bat "npm run test:google"
                     }
                 }
                 stage('Test Wikipedia') {
                     steps {
-                        bat 'npm run test:wikipedia'
+                        bat "npm run test:wikipedia"
                     }
+                }
+            }
+        }
+
+        stage('Organize Artifacts') {
+            steps {
+                script {
+                    bat "mkdir ${VIDEO_DIR}"
+                    bat "mkdir ${REPORT_DIR}"
+                    bat "copy /Y artifacts\\videos\\* ${VIDEO_DIR}"
+                    bat "copy /Y artifacts\\reports\\* ${REPORT_DIR}"
                 }
             }
         }
 
         stage('Archive Artifacts') {
             steps {
-                archiveArtifacts allowEmptyArchive: true, artifacts: 'artifacts/videos/*/, artifacts/reports/*/', followSymlinks: false
+                archiveArtifacts allowEmptyArchive: true, artifacts: "${VERSIONED_DIR}**/*", followSymlinks: false
             }
         }
 
@@ -50,14 +62,16 @@ pipeline {
             steps {
                 script {
                     publishHTML(target: [
-                        reportName: 'Test Report (Google)',
-                        reportDir: 'artifacts/reports',
-                        reportFiles: 'google-report.html'
+                        reportName : "Test Report (Google)",
+                        reportDir  : "${REPORT_DIR}",
+                        reportFiles: 'google-report.html',
+                        keepAll    : true
                     ])
                     publishHTML(target: [
-                        reportName: 'Test Report (Wikipedia)',
-                        reportDir: 'artifacts/reports',
-                        reportFiles: 'wikipedia-report.html'
+                        reportName : "Test Report (Wikipedia)",
+                        reportDir  : "${REPORT_DIR}",
+                        reportFiles: 'wikipedia-report.html',
+                        keepAll    : true
                     ])
                 }
             }
@@ -66,7 +80,7 @@ pipeline {
 
     post {
         always {
-            archiveArtifacts allowEmptyArchive: true, artifacts: 'artifacts/videos/*/, artifacts/reports/*/', followSymlinks: false
+            archiveArtifacts allowEmptyArchive: true, artifacts: "${VERSIONED_DIR}**/*", followSymlinks: false
         }
     }
 }
