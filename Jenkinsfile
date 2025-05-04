@@ -1,88 +1,68 @@
 pipeline {
     agent any
-
     environment {
-        VIDEO_DIR = 'artifacts/videos/'
-        REPORT_DIR = 'artifacts/reports/'
+        // You can set environment variables here if needed
     }
-
-    options {
-        // Supprime les anciens artefacts pour chaque build
-        skipDefaultCheckout()
-        buildDiscarder(logRotator(numToKeepStr: '5', artifactNumToKeepStr: '1'))
-    }
-
     stages {
         stage('Clean Workspace') {
             steps {
-                // Nettoie l'espace de travail avant chaque build
-                deleteDir()
+                deleteDir() // Cleans the workspace
             }
         }
-
         stage('Checkout') {
             steps {
-                // Récupère le code depuis le repository
-                checkout scm
+                checkout scm // Checkout the repository
             }
         }
-
-        stage('Cache node_modules') {
+        stage('Install Dependencies') {
             steps {
-                // Utilise un cache pour node_modules
-                cache(path: 'node_modules', key: "npm-cache-${env.JOB_NAME}", restoreKeys: ['npm-cache-']) {
-                    bat 'npm install'
+                script {
+                    // Add your commands to install dependencies if needed, e.g., npm install or mvn install
+                    sh 'npm install' // Example command for Node.js, replace with your relevant command
                 }
             }
         }
-
-        stage('Run Tests in Parallel') {
+        stage('Run Tests') {
             parallel {
                 stage('Test Google') {
                     steps {
-                        // Exécution des tests pour Google
-                        bat 'npm run test:google'
+                        script {
+                            // Add your test command here, e.g., running TestCafe tests for Google
+                            sh 'npm test -- --testNamePattern=Google'
+                        }
                     }
                 }
                 stage('Test Wikipedia') {
                     steps {
-                        // Exécution des tests pour Wikipedia
-                        bat 'npm run test:wikipedia'
+                        script {
+                            // Add your test command here, e.g., running TestCafe tests for Wikipedia
+                            sh 'npm test -- --testNamePattern=Wikipedia'
+                        }
                     }
                 }
             }
         }
-
         stage('Archive Artifacts') {
             steps {
-                // Archive les vidéos et rapports générés
-                archiveArtifacts allowEmptyArchive: true, artifacts: 'artifacts/videos/**/*, artifacts/reports/**/*', followSymlinks: false
+                archiveArtifacts artifacts: '**/target/*.jar', allowEmptyArchive: true // Adjust based on your artifacts
             }
         }
-
         stage('Publish Test Results') {
             steps {
-                script {
-                    // Publier les rapports HTML
-                    publishHTML(target: [
-                        reportName: 'Test Report (Google)',
-                        reportDir: 'artifacts/reports',
-                        reportFiles: 'google-report.html'
-                    ])
-                    publishHTML(target: [
-                        reportName: 'Test Report (Wikipedia)',
-                        reportDir: 'artifacts/reports',
-                        reportFiles: 'wikipedia-report.html'
-                    ])
-                }
+                junit '**/target/test-*.xml' // Adjust based on where your test results are stored
             }
         }
     }
-
     post {
         always {
-            // Archiver les artefacts finaux après le build
-            archiveArtifacts allowEmptyArchive: true, artifacts: 'artifacts/videos/**/*, artifacts/reports/**/*', followSymlinks: false
+            // Any actions to take after the pipeline finishes, like cleanup
+            echo 'Cleaning up after the build.'
+        }
+        success {
+            echo 'Build and tests passed successfully!'
+        }
+        failure {
+            echo 'There was a failure in the pipeline.'
         }
     }
 }
