@@ -1,68 +1,72 @@
 pipeline {
     agent any
+
     environment {
-        // You can set environment variables here if needed
+        VIDEO_DIR = 'artifacts/videos/'
+        REPORT_DIR = 'artifacts/reports/'
     }
+
     stages {
         stage('Clean Workspace') {
             steps {
-                deleteDir() // Cleans the workspace
+                deleteDir()
             }
         }
+
         stage('Checkout') {
             steps {
-                checkout scm // Checkout the repository
+                checkout scm
             }
         }
+
         stage('Install Dependencies') {
             steps {
-                script {
-                    // Add your commands to install dependencies if needed, e.g., npm install or mvn install
-                    sh 'npm install' // Example command for Node.js, replace with your relevant command
-                }
+                bat 'npm install'
             }
         }
-        stage('Run Tests') {
+
+        stage('Run Tests in Parallel') {
             parallel {
                 stage('Test Google') {
                     steps {
-                        script {
-                            // Add your test command here, e.g., running TestCafe tests for Google
-                            sh 'npm test -- --testNamePattern=Google'
-                        }
+                        bat 'npm run test:google'
                     }
                 }
                 stage('Test Wikipedia') {
                     steps {
-                        script {
-                            // Add your test command here, e.g., running TestCafe tests for Wikipedia
-                            sh 'npm test -- --testNamePattern=Wikipedia'
-                        }
+                        bat 'npm run test:wikipedia'
                     }
                 }
             }
         }
+
         stage('Archive Artifacts') {
             steps {
-                archiveArtifacts artifacts: '**/target/*.jar', allowEmptyArchive: true // Adjust based on your artifacts
+                archiveArtifacts allowEmptyArchive: true, artifacts: 'artifacts/videos/**/*, artifacts/reports/**/*', followSymlinks: false
             }
         }
+
         stage('Publish Test Results') {
             steps {
-                junit '**/target/test-*.xml' // Adjust based on where your test results are stored
+                script {
+                    publishHTML(target: [
+                        reportName: 'Test Report (Google)',
+                        reportDir: 'artifacts/reports',
+                        reportFiles: 'google-report.html'
+                    ])
+                    publishHTML(target: [
+                        reportName: 'Test Report (Wikipedia)',
+                        reportDir: 'artifacts/reports',
+                        reportFiles: 'wikipedia-report.html'
+                    ])
+                }
             }
         }
     }
+
     post {
         always {
-            // Any actions to take after the pipeline finishes, like cleanup
-            echo 'Cleaning up after the build.'
-        }
-        success {
-            echo 'Build and tests passed successfully!'
-        }
-        failure {
-            echo 'There was a failure in the pipeline.'
+            archiveArtifacts allowEmptyArchive: true, artifacts: 'artifacts/videos/**/*, artifacts/reports/**/*', followSymlinks: false
         }
     }
 }
