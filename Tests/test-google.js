@@ -8,5 +8,4 @@ test('Recherche TestCafe sur Google', async t => {
 
     await t
         .typeText(searchInput, 'TestCafe')
-        .wait(60000)
 });
