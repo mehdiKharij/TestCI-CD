@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-  "test:google": "testcafe chrome:headless tests/test-google.js --skip-js-errors --video artifacts/videos --video-options pathPattern='${TEST_INDEX}_${USERAGENT}_${FILE_INDEX}_google.mp4' --reporter html:artifacts/reports/google-report.html",
-  "test:wikipedia": "testcafe chrome:headless tests/test-wikipedia.js --skip-js-errors --video artifacts/videos --video-options pathPattern='${TEST_INDEX}_${USERAGENT}_${FILE_INDEX}_wikipedia.mp4' --reporter html:artifacts/reports/wikipedia-report.html"
+  "test:google": "testcafe chrome:headless tests/test-google.js --skip-js-errors --video artifacts/videos --video-options pathPattern='google.mp4' --reporter html:artifacts/reports/google-report.html",
+  "test:wikipedia": "testcafe chrome:headless tests/test-wikipedia.js --skip-js-errors --video artifacts/videos --video-options pathPattern='wikipedia.mp4' --reporter html:artifacts/reports/wikipedia-report.html"
 },
   "keywords": [],
   "author": "",
