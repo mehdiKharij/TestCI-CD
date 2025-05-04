@@ -7,20 +7,28 @@ pipeline {
     }
 
     stages {
+        stage('Clean Workspace') {
+            steps {
+                deleteDir()
+            }
+        }
+
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+
         stage('Run Tests in Parallel') {
             parallel {
                 stage('Test Google') {
                     steps {
-                        script {
-                            bat 'npm run test:google'
-                        }
+                        bat 'npm run test:google'
                     }
                 }
                 stage('Test Wikipedia') {
                     steps {
-                        script {
-                            bat 'npm run test:wikipedia'
-                        }
+                        bat 'npm run test:wikipedia'
                     }
                 }
             }
@@ -28,9 +36,7 @@ pipeline {
 
         stage('Archive Artifacts') {
             steps {
-                script {
-                    archiveArtifacts allowEmptyArchive: true, artifacts: 'artifacts/videos/**/*, artifacts/reports/**/*', followSymlinks: false
-                }
+                archiveArtifacts allowEmptyArchive: true, artifacts: 'artifacts/videos/**/*, artifacts/reports/**/*', followSymlinks: false
             }
         }
 
@@ -38,13 +44,13 @@ pipeline {
             steps {
                 script {
                     publishHTML(target: [
-                        reportName : 'Test Report (Google)',
-                        reportDir  : 'artifacts/reports',
+                        reportName: 'Test Report (Google)',
+                        reportDir: 'artifacts/reports',
                         reportFiles: 'google-report.html'
                     ])
                     publishHTML(target: [
-                        reportName : 'Test Report (Wikipedia)',
-                        reportDir  : 'artifacts/reports',
+                        reportName: 'Test Report (Wikipedia)',
+                        reportDir: 'artifacts/reports',
                         reportFiles: 'wikipedia-report.html'
                     ])
                 }
