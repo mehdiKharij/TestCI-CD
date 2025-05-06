@@ -3,9 +3,9 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test:google": "testcafe chrome tests/test-google.js --skip-js-errors --video artifacts/videos/ --reporter html:artifacts/reports/google-report.html",
-    "test:wikipedia": "testcafe chrome tests/test-wikipedia.js --skip-js-errors --video artifacts/videos/ --reporter html:artifacts/reports/wikipedia-report.html"
-  },
+  "test:google": "testcafe chrome tests/test-google.js --skip-js-errors --video artifacts/videos --video-options pathPattern='google.mp4' --reporter html:artifacts/reports/google-report.html",
+  "test:wikipedia": "testcafe chrome tests/test-wikipedia.js --skip-js-errors --video artifacts/videos --video-options pathPattern='wikipedia.mp4' --reporter html:artifacts/reports/wikipedia-report.html"
+},
   "keywords": [],
   "author": "",
   "license": "ISC",
