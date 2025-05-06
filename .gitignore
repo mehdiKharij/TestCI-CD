@@ -1,0 +1,20 @@
+# Node modules
+node_modules/
+
+# TestCafe videos and reports
+artifacts/
+
+# Logs
+*.log
+npm-debug.log*
+
+# IDE settings
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Environment files
+.env

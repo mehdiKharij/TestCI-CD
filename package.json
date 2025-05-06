@@ -3,9 +3,11 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-  "test:google": "testcafe chrome tests/test-google.js --skip-js-errors --video artifacts/videos --video-options pathPattern='google.mp4' --reporter html:artifacts/reports/google-report.html",
-  "test:wikipedia": "testcafe chrome tests/test-wikipedia.js --skip-js-errors --video artifacts/videos --video-options pathPattern='wikipedia.mp4' --reporter html:artifacts/reports/wikipedia-report.html"
-},
+    "test:google": "testcafe chrome tests/test-google.js --skip-js-errors --video artifacts/videos --video-options pathPattern=google.mp4 --reporter html:artifacts/reports/google-report.html",
+    "test:wikipedia": "testcafe chrome tests/test-wikipedia.js --skip-js-errors --video artifacts/videos --video-options pathPattern=wikipedia.mp4 --reporter html:artifacts/reports/wikipedia-report.html",
+    "test:gpt1": "testcafe chrome tests/test-gpt1.js --skip-js-errors --video artifacts/videos --video-options pathPattern=gpt1.mp4 --reporter html:artifacts/reports/gpt1-report.html",
+    "test:gpt2": "testcafe chrome tests/test-gptVersions.js --skip-js-errors --video artifacts/videos --video-options pathPattern=gpt2.mp4 --reporter html:artifacts/reports/gpt2-report.html"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
