@@ -37,6 +37,16 @@ pipeline {
                         bat 'npm run test:wikipedia'
                     }
                 }
+                stage('Test GPT1') {
+                    steps {
+                        bat 'npm run test:gpt1'
+                    }
+                }
+                stage('Test GPT2') {
+                    steps {
+                        bat 'npm run test:gpt2'
+                    }
+                }
             }
         }
 
@@ -58,6 +68,16 @@ pipeline {
                         reportName: 'Test Report (Wikipedia)',
                         reportDir: 'artifacts/reports',
                         reportFiles: 'wikipedia-report.html'
+                    ])
+                    publishHTML(target: [
+                        reportName: 'Test Report (GPT1)',
+                        reportDir: 'artifacts/reports',
+                        reportFiles: 'gpt1-report.html'
+                    ])
+                    publishHTML(target: [
+                        reportName: 'Test Report (GPT2)',
+                        reportDir: 'artifacts/reports',
+                        reportFiles: 'gpt2-report.html'
                     ])
                 }
             }
