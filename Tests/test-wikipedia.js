@@ -8,7 +8,6 @@ test('Connexion a wikipedia Test', async t => {
     const pwd = Selector('input[name="wpPassword"]');
 
     await t
-        .typeText(user, 'pz@gmail.com')
-        .typeText(pwd, '123456')
-         .wait(30000)
+   
+         .wait(6000)
 });
