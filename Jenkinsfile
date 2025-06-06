@@ -27,24 +27,19 @@ pipeline {
 
         stage('Run Tests in Parallel') {
             parallel {
-                stage('Test Google') {
+                stage('Test 1') {
                     steps {
                         bat 'npm run test:google'
                     }
                 }
-                stage('Test Wikipedia') {
+                stage('Test 2') {
                     steps {
                         bat 'npm run test:wikipedia'
                     }
                 }
-                stage('Test GPT1') {
+                stage('Test 3') {
                     steps {
                         bat 'npm run test:gpt1'
-                    }
-                }
-                stage('Test GPT2') {
-                    steps {
-                        bat 'npm run test:gpt2'
                     }
                 }
             }
@@ -60,25 +55,21 @@ pipeline {
             steps {
                 script {
                     publishHTML(target: [
-                        reportName: 'Test Report (Google)',
+                        reportName: 'Test Report 1',
                         reportDir: 'artifacts/reports',
-                        reportFiles: 'google-report.html'
+                        reportFiles: 'reportTest1.html'
                     ])
                     publishHTML(target: [
-                        reportName: 'Test Report (Wikipedia)',
+                        reportName: 'Test Report 2',
                         reportDir: 'artifacts/reports',
-                        reportFiles: 'wikipedia-report.html'
+                        reportFiles: 'reportTest2.html'
                     ])
                     publishHTML(target: [
-                        reportName: 'Test Report (GPT1)',
+                        reportName: 'Test Report 2',
                         reportDir: 'artifacts/reports',
-                        reportFiles: 'gpt1-report.html'
+                        reportFiles: 'reportTest3.html'
                     ])
-                    publishHTML(target: [
-                        reportName: 'Test Report (GPT2)',
-                        reportDir: 'artifacts/reports',
-                        reportFiles: 'gpt2-report.html'
-                    ])
+                  
                 }
             }
         }
