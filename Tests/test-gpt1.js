@@ -8,6 +8,6 @@ test('Envoyer un prompt à ChatGPT', async t => {
 
     await t
        
-        .wait(6000); // attendre une réponse
+        .wait(8000); // attendre une réponse
 
 });
